@@ -5,14 +5,18 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.rktirtho.restdatafilter.model.Teacher;
 import com.rktirtho.restdatafilter.service.TeacherService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 
 import static com.rktirtho.restdatafilter.utils.JsonUtils.jsonValueIgnore;
 import static com.rktirtho.restdatafilter.utils.JsonUtils.jsonValueInclude;
@@ -68,6 +72,14 @@ public class DynamicFilterController {
         final String[] fields = {"phoneNumber", "lastDegree"};
 
         return jsonValueInclude("SomeBeanFilter", teacher, fields);
+    }
+
+    @GetMapping("test")
+    public Map<String, String> test() {
+        Map<String, String> map = new HashMap<>();
+        map.put("name", "Uri");
+        map.put("user", "Admin");
+        return  map;
     }
 
 
