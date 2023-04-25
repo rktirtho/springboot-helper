@@ -8,6 +8,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.core.step.skip.SkipPolicy;
 import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
@@ -69,9 +70,26 @@ public class BatchConfig {
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
+                .faultTolerant()
+                .skipPolicy(skipPolicy())
                 .taskExecutor(taskExecutor())
                 .build();
     }
+
+//    @Bean
+//    public Step step1(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+//        return new StepBuilder("csv-step", jobRepository)
+//                .<Customer, Customer>chunk(10, transactionManager)
+//                .reader(reader())
+//                .processor(processor())
+//                .writer(writer())
+//                .faultTolerant()
+//                .skipLimit(100)
+//                .skip(NumberFormatException.class)
+////                .noSkip(IllegalArgumentException.class)
+//                .taskExecutor(taskExecutor())
+//                .build();
+//    }
 
     @Bean
     public Job runJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
@@ -93,5 +111,9 @@ public class BatchConfig {
         return taskExecutor;
     }
 
+    @Bean
+    public SkipPolicy skipPolicy(){
+        return new ExceptionSkipPolicy();
+    }
 
 }
