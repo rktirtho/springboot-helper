@@ -1,9 +1,11 @@
 package com.rktirtho.springbatch.config;
 
 import com.rktirtho.springbatch.entity.Customer;
+import com.rktirtho.springbatch.listener.StepSkipListener;
 import com.rktirtho.springbatch.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.SkipListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -71,6 +73,7 @@ public class BatchConfig {
                 .processor(processor())
                 .writer(writer())
                 .faultTolerant()
+                .listener(skipListener())
                 .skipPolicy(skipPolicy())
                 .taskExecutor(taskExecutor())
                 .build();
@@ -114,6 +117,11 @@ public class BatchConfig {
     @Bean
     public SkipPolicy skipPolicy(){
         return new ExceptionSkipPolicy();
+    }
+
+    @Bean
+    public SkipListener skipListener(){
+        return new StepSkipListener();
     }
 
 }
