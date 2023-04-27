@@ -120,7 +120,7 @@ public class BatchConfig {
     }
 
     @Bean
-    public SkipListener skipListener(){
+    public SkipListener<Customer, Number> skipListener(){
         return new StepSkipListener();
     }
 
